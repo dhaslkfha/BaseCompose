@@ -12,7 +12,7 @@ interface NetWorkApi {
 
     /**
      */
-    @POST("/hit/ascribeRecordReqs")
-    suspend fun ascribeRecordReqs(@Body requestBody: RequestBody): CommonResponse<Boolean>
+    @POST("/user/orders")
+    suspend fun getOrders(@Body requestBody: RequestBody): CommonResponse<Boolean>
 
 }

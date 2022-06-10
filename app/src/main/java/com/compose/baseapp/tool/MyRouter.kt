@@ -32,7 +32,7 @@ fun MyNavigationEntry(
     Scaffold() { paddingValues ->
         NavHost(
             navController = MyApplication.navigationController!!,
-            startDestination = MyRouter.Route_SplashPage,
+            startDestination = if (SPUtils.getParam(MyApplication.INSTANT,"firstIn",true) as Boolean) MyRouter.Route_SplashPage else MyRouter.Route_HomePage,
             modifier = Modifier.padding(paddingValues)
         ) {
             //启动

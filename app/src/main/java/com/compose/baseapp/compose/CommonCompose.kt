@@ -46,7 +46,10 @@ fun comLine() {
 }
 
 @Composable
-fun comPicker() {
+fun comPicker(onClick: (((String) -> Unit) -> Unit)? = null) {
+    var text by remember {
+        mutableStateOf("内容")
+    }
     Row(
         modifier = Modifier
             .fillMaxWidth(1f)
@@ -56,14 +59,18 @@ fun comPicker() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(text = "标题：", style = textStyleItem, modifier = Modifier.weight(1f))
-        Text(text = "内容", style = textStyleItem)
+        Text(text = text, style = textStyleItem)
         Image(
             painter = rememberImagePainter(data = R.mipmap.ic_launcher),
             contentDescription = "",
             modifier = Modifier
                 .size(dpComHorPadding)
                 .clickable {
-
+                    onClick?.let {
+                        it {
+                            text = it
+                        }
+                    }
                 }
         )
     }

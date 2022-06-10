@@ -3,6 +3,7 @@
 package com.compose.baseapp.compose
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -26,17 +27,20 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
+import com.compose.baseapp.MyApplication
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
-import com.compose.baseapp.tool.MainViewModel
-import com.compose.baseapp.tool.MyRouter
-import com.compose.baseapp.tool.routeTo
-import com.compose.baseapp.tool.routeToDetail
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.compose.baseapp.R
+import com.compose.baseapp.tool.*
+import com.qw.soul.permission.SoulPermission
+import com.qw.soul.permission.bean.Permission
+import com.qw.soul.permission.bean.Permissions
+import com.qw.soul.permission.callbcak.CheckRequestPermissionsListener
+import java.util.jar.Manifest
 
 @Preview
 @Composable
@@ -191,10 +195,34 @@ fun thirdPage() {
         }) {
             Text(text = "去登录")
         }
-        Button(onClick = {
-            routeTo(MyRouter.Route_AccountPage)
-        }) {
-            Text(text = "去登录")
+        var uri: Uri? by remember {
+            mutableStateOf(null)
         }
+        Button(onClick = {
+            var permissions = Permissions.build(
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.CAMERA
+            )
+            SoulPermission.getInstance().checkAndRequestPermissions(permissions, object :
+                CheckRequestPermissionsListener {
+                override fun onAllPermissionOk(allPermissions: Array<out Permission>?) {
+                    PhotoPickerUtils.choseImage { photos, isOriginal ->
+                        uri = photos?.get(0)?.uri
+                    }
+                }
+
+                override fun onPermissionDenied(refusedPermissions: Array<out Permission>?) {
+                }
+            })
+        }) {
+            Text(text = "获取照片")
+        }
+        comPicker { call ->
+            PickerUtils.birthdayPicker(MyApplication.curActivity) {
+                call(it)
+            }
+        }
+        Image(painter = rememberImagePainter(data = uri), contentDescription = "")
+
     }
 }

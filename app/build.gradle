@@ -99,5 +99,12 @@ dependencies {
     //pic
     api "io.coil-kt:coil-compose:1.4.0"
     api 'io.coil-kt:coil:1.4.0'
+    //photo picker
+    implementation 'com.github.HuanTanSheng:EasyPhotos:3.1.5'
+    //ucrop
+    implementation 'com.github.yalantis:ucrop:2.2.6-native'
+    //picker
+    implementation 'com.contrarywind:Android-PickerView:4.1.9'
+
 
 }
